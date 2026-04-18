@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import sys
+import analizador_lexico
+
+def main():
+    if len(sys.argv) < 2:
+        print("Error. Uso correcto: ./analizador <archivo_de_prueba>")
+        sys.exit(1)
+
+    fileName = sys.argv[1]
+    
+    try:
+        with open(fileName, 'r') as archivo:
+            source = archivo.read()
+            
+            analizador_lexico.analizar(source) 
+            
+    except FileNotFoundError:
+        print(f"Error: El archivo '{fileName}' no existe.")
+
+if __name__ == "__main__":
+    main()
