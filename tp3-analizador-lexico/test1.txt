@@ -1,1 +1,4 @@
-program test1;
+program test1:
+..
+(())
+;/+=> <> >=
