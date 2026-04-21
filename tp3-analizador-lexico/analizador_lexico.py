@@ -54,19 +54,19 @@ def analyzer(source):
                 tokens.append(("op_aritmetico", "DIV"));
                 i += 1;
             case ';':
-                tokens.append(("simbolo_especial", "PUNTO_COMA"));
+                tokens.append(("punto_coma", "PUNTO_COMA"));
                 i += 1;
             case ',':
-                tokens.append(("simbolo_especial", "COMA"));
+                tokens.append(("coma", "COMA"));
                 i += 1;
             case '.':
-                tokens.append(("simbolo_especial", "PUNTO"));
+                tokens.append(("punto", "PUNTO"));
                 i += 1;
             case '(':
-                tokens.append(("simbolo_especial", "PAREN_IZ"));
+                tokens.append(("paren_iz", "PAREN_IZ"));
                 i += 1;
             case ')':
-                tokens.append(("simbolo_especial", "PAREN_DR"));
+                tokens.append(("paren_dr", "PAREN_DR"));
                 i += 1;
             
             # analizar palabras (identificadores y palabras reservadas) o números
