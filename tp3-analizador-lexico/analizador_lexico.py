@@ -3,6 +3,7 @@ def analyzer(source):
     tokens = []
     i = 0
     n = len(source)
+    line_number = 1
 
     while i < n:
         c = source[i]
@@ -10,6 +11,8 @@ def analyzer(source):
         # ignorar espacios en blanco, tabulaciones y saltos de línea
         if c in ' \t\n\r':
             i += 1
+            if(c == '\n'):
+                line_number += 1
             continue
 
         # analizar símbolos de un solo caracter o compuestos
@@ -19,7 +22,7 @@ def analyzer(source):
                     tokens.append(("ASIGNAR", ":="));
                     i += 2;
                 else:
-                    tokens.append(("simbolo_especial", "DOS_PUNTOS"));
+                    tokens.append(("dos_puntos", "DOS_PUNTOS"));
                     i += 1;
             case '<':
                 if i + 1 < n and source[i + 1] == '>':
@@ -54,21 +57,29 @@ def analyzer(source):
                 tokens.append(("op_aritmetico", "DIV"));
                 i += 1;
             case ';':
-                tokens.append(("simbolo_especial", "PUNTO_COMA"));
+                tokens.append(("punto_coma", "PUNTO_COMA"));
                 i += 1;
             case ',':
-                tokens.append(("simbolo_especial", "COMA"));
+                tokens.append(("coma", "COMA"));
                 i += 1;
             case '.':
-                tokens.append(("simbolo_especial", "PUNTO"));
+                tokens.append(("punto", "PUNTO"));
                 i += 1;
             case '(':
-                tokens.append(("simbolo_especial", "PAREN_IZ"));
+                tokens.append(("paren_izq", "PAREN_IZQ"));
                 i += 1;
             case ')':
-                tokens.append(("simbolo_especial", "PAREN_DR"));
+                tokens.append(("paren_der", "PAREN_DER"));
                 i += 1;
-            
+            case '{': 
+                end = i + 1;
+                while end < n and source[end] != '}':
+                    end += 1;
+                if end < n:
+                    i = end + 1;
+                else:
+                    print(f"Error léxico en línea {line_number}");
+                    i += 1;
             # analizar palabras (identificadores y palabras reservadas) o números
             case _:
                 if c.isalpha():
@@ -82,8 +93,14 @@ def analyzer(source):
                         tokens.append((word.upper(), word))
                     else:
                         tokens.append(("id", word))
-                #elif c.isdigit():
-                
+                elif c.isdigit():
+                    start = i
+                    while i < n and source[i].isdigit():
+                        i += 1
+                    tokens.append(("num", source[start:i]))
+                else:
+                    i += 1;
+                    print(f"Error léxico en línea {line_number}")
     return tokens
 
 def read_source(fileName):
