@@ -124,8 +124,8 @@ def analyzer(source):
                     tokens.append(("num", source[start:i]))
                 else:
                     i += 1;
-                    errores.append(f"Error léxico en línea {line_number}, col {col}, caracter no válido: {c}")
-                    col += 1;
+                    errores.append(f"Error léxico en línea {line_number}, col {col}, caracter no válido: {c}");
+                    break;
     return tokens, errores
 
 def read_source(fileName):
