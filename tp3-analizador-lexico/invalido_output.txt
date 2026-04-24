@@ -1,0 +1,42 @@
+PROGRAM, program
+id, invalido
+punto_coma, PUNTO_COMA
+BEGIN, begin
+id, x
+ASIGNAR, :=
+num, 10
+num, 5
+punto_coma, PUNTO_COMA
+id, x
+ASIGNAR, :=
+num, 10
+num, 5
+punto_coma, PUNTO_COMA
+id, x
+ASIGNAR, :=
+num, 10
+num, 5
+punto_coma, PUNTO_COMA
+id, x
+ASIGNAR, :=
+num, 10
+num, 5
+punto_coma, PUNTO_COMA
+id, x
+ASIGNAR, :=
+num, 10
+num, 5
+punto_coma, PUNTO_COMA
+id, x
+ASIGNAR, :=
+num, 10
+num, 5
+punto_coma, PUNTO_COMA
+END, end
+punto, PUNTO
+Error léxico en línea 3, col 11, caracter no válido: @
+Error léxico en línea 4, col 11, caracter no válido: _
+Error léxico en línea 5, col 11, caracter no válido: ¡
+Error léxico en línea 6, col 11, caracter no válido: ¿
+Error léxico en línea 7, col 11, caracter no válido: $
+Error léxico en línea 8, col 11, caracter no válido: %

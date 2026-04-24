@@ -1,0 +1,11 @@
+program ids;
+var resultado, acc : integer;
+var cond : boolean;
+begin
+  cond := true;
+  acc := 0;
+  while (cond) {
+  	acc := acc + 1;
+  }
+  resultado := acc;
+end.

@@ -1,0 +1,5 @@
+PROGRAM, program
+id, comentarioError
+punto_coma, PUNTO_COMA
+BEGIN, begin
+Error léxico en línea 3, comentario sin cerrar
