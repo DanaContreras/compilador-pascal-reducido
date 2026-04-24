@@ -1,6 +1,7 @@
 def analyzer(source):
     keyword_table = ["program", "var", "integer", "begin", "boolean", "end", "if", "then", "else", "while", "do", "read", "write", "and", "or", "not"]
     tokens = []
+    errores = []
     i = 0
     n = len(source)
     line_number = 1
@@ -100,7 +101,8 @@ def analyzer(source):
                 if end < n:
                     i = end + 1;
                 else:
-                    print(f"Error léxico en línea {line_number}, comentario sin cerrar");
+                    errores.append(f"Error léxico en línea {line_number}, comentario sin cerrar");
+                    i = n
             # analizar palabras (identificadores y palabras reservadas) o números
             case _:
                 if c.isalpha():
@@ -122,21 +124,23 @@ def analyzer(source):
                     tokens.append(("num", source[start:i]))
                 else:
                     i += 1;
-                    print(f"Error léxico en línea {line_number}, col {col}, caracter no válido: {c}")
+                    errores.append(f"Error léxico en línea {line_number}, col {col}, caracter no válido: {c}")
                     col += 1;
-    return tokens
+    return tokens, errores
 
 def read_source(fileName):
     try:
         with open(fileName, 'r', encoding='utf-8') as file:
             source = file.read();
         
-        tokens = analyzer(source);
+        tokens, errores = analyzer(source);
 
         try:
             with open("output.txt", 'w', encoding='utf-8') as output:
                 for token in tokens:
                     output.write(f"{token[0]}, {token[1] if token[1] is not None else ''}\n");
+                for error in errores:
+                    output.write(f"{error}\n");
             print("Análisis léxico completado. Resultados guardados en 'output.txt'.");
             
         except IOError:
