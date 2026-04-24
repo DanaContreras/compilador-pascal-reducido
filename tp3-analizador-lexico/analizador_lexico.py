@@ -1,5 +1,5 @@
 def analyzer(source):
-    keyword_table = ["program", "var", "integer", "begin", "end", "if", "then", "else", "while", "do", "read", "write", "and", "or", "not"]
+    keyword_table = ["program", "var", "integer", "begin", "boolean", "end", "if", "then", "else", "while", "do", "read", "write", "and", "or", "not"]
     tokens = []
     i = 0
     n = len(source)
