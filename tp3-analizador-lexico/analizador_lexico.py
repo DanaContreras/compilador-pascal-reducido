@@ -74,16 +74,13 @@ def analyzer(source):
                 col += 1;
             case ';':
                 tokens.append(("punto_coma", "PUNTO_COMA"));
-                tokens.append(("punto_coma", "PUNTO_COMA"));
                 i += 1;
                 col += 1;
             case ',':
                 tokens.append(("coma", "COMA"));
-                tokens.append(("coma", "COMA"));
                 i += 1;
                 col += 1;
             case '.':
-                tokens.append(("punto", "PUNTO"));
                 tokens.append(("punto", "PUNTO"));
                 i += 1;
                 col += 1;
