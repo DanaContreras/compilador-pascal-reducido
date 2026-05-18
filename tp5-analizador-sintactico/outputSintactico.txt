@@ -1,0 +1,33 @@
+TOKENS PROCESADOS
+program, program
+id, suma
+punto_coma, ;
+punto_coma, ;
+var, var
+id, id
+coma, ,
+coma, ,
+id, resultado
+dos_puntos, :
+integer, integer
+punto_coma, ;
+punto_coma, ;
+begin, begin
+id, id
+asignar, :=
+num, 123
+punto_coma, ;
+punto_coma, ;
+id, resultado
+asignar, :=
+id, id
+op_aritmetico, +
+num, 7
+punto_coma, ;
+punto_coma, ;
+end, end
+punto, .
+punto, .
+
+ERRORES
+No se encontraron errores.

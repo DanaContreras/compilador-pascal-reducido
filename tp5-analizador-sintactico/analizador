@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import sys
-import analizador_lexico
+import analizador_sintactico
 
 def main():
     if len(sys.argv) < 2:
@@ -8,7 +8,7 @@ def main():
         sys.exit(1);
 
     fileName = sys.argv[1];
-    analizador_lexico.read_source(fileName);
+    analizador_sintactico.read_source(fileName);
 
 if __name__ == "__main__":
     main()
