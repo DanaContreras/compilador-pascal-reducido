@@ -1,8 +1,6 @@
 PROGRAM, program
 id, hola
 punto_coma, PUNTO_COMA
-punto_coma, PUNTO_COMA
 BEGIN, begin
 END, end
-punto, PUNTO
 punto, PUNTO

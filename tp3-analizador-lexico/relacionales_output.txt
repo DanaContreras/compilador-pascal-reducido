@@ -1,7 +1,6 @@
 PROGRAM, program
 id, relacionales
 punto_coma, PUNTO_COMA
-punto_coma, PUNTO_COMA
 BEGIN, begin
 IF, if
 id, a
@@ -13,7 +12,6 @@ paren_iz, PAREN_IZ
 id, a
 paren_der, PAREN_DER
 punto_coma, PUNTO_COMA
-punto_coma, PUNTO_COMA
 IF, if
 id, a
 op_relacional, LE
@@ -23,7 +21,6 @@ WRITE, write
 paren_iz, PAREN_IZ
 id, a
 paren_der, PAREN_DER
-punto_coma, PUNTO_COMA
 punto_coma, PUNTO_COMA
 IF, if
 id, a
@@ -35,7 +32,6 @@ paren_iz, PAREN_IZ
 id, a
 paren_der, PAREN_DER
 punto_coma, PUNTO_COMA
-punto_coma, PUNTO_COMA
 IF, if
 id, a
 op_relacional, GT
@@ -45,7 +41,6 @@ WRITE, write
 paren_iz, PAREN_IZ
 id, a
 paren_der, PAREN_DER
-punto_coma, PUNTO_COMA
 punto_coma, PUNTO_COMA
 IF, if
 id, a
@@ -57,7 +52,6 @@ paren_iz, PAREN_IZ
 id, a
 paren_der, PAREN_DER
 punto_coma, PUNTO_COMA
-punto_coma, PUNTO_COMA
 IF, if
 id, a
 op_relacional, EQ
@@ -68,7 +62,5 @@ paren_iz, PAREN_IZ
 id, a
 paren_der, PAREN_DER
 punto_coma, PUNTO_COMA
-punto_coma, PUNTO_COMA
 END, end
-punto, PUNTO
 punto, PUNTO
