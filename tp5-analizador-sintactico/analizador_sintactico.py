@@ -111,7 +111,7 @@ def mas_subrutinas():
 def subprograma():
     if preanalisis[1] == "procedure":
         procedimiento()
-    elif preanalisis[1] == "function":
+    else:
         funcion()
 
 def procedimiento():
@@ -125,7 +125,7 @@ def procedimiento_prima():
         match_val(";")
         bloque()
         match_val(";")
-    elif preanalisis[1] == ";":
+    else:
         match_val(";")
         bloque()
         match_val(";")
@@ -143,7 +143,7 @@ def funcion_prima():
         match_val(";")
         bloque()
         match_val(";")
-    elif preanalisis[1] == ":":
+    else:
         match_val(":")
         tipo()
         match_val(";")
@@ -179,14 +179,14 @@ def sentencia_compuesta():
     sentencia_compuesta_prima()
 
 def sentencia_compuesta_prima():
-    if preanalisis[1] == ";":
+    if preanalisis[1] in ["id", "if", "while", "begin", "read", "write"]:
+        lista_sentencias()
+        lista_sentencias_cont()
+    elif preanalisis[1] == ";":
         match_val(";")
         match_val("end")
     elif preanalisis[1] == "end":
         match_val("end")
-    elif preanalisis[1] in ["id", "if", "while", "begin", "read", "write"]:
-        lista_sentencias()
-        lista_sentencias_cont()
 
 def lista_sentencias_cont():
     if preanalisis[1] == ";":
@@ -232,11 +232,9 @@ def sentencia_cerrada():
             match_val("else")
             match_val("then")
             sentencia_cerrada()
-        case _:
-            raise SyntaxError(f"Sentencia cerrada inválida. Encontrado: {preanalisis[1]}")
 
 def sentencia_abierta():
-    global token_index, preanalisis
+    global preanalisis
     match_val("if")
     expresion()
     match_val("then")
@@ -264,7 +262,7 @@ def while_loop():
 def entrada_salida():
     if preanalisis[1] == "read":
         entrada()
-    elif preanalisis[1] == "write":
+    else:
         salida()
 
 def entrada():
@@ -376,6 +374,13 @@ def def_variable():
 def lista_variables():
     match_type("id")
     mas_ids()
+
+def llamadaProcedimiento():
+    match_type("id")
+    if preanalisis[1] == "(":
+        match_val("(")
+        lista_expresiones()
+        match_val(")")
 
 def tipo():
     if preanalisis[1] in ["integer", "boolean"]:

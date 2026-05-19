@@ -1,4 +1,4 @@
-TOKENS PROCESADOS
+**** TOKENS PROCESADOS ****
 program, program
 id, suma
 punto_coma, ;
@@ -29,5 +29,5 @@ end, end
 punto, .
 punto, .
 
-ERRORES
+**** ERRORES ****
 No se encontraron errores.
