@@ -78,7 +78,7 @@ def bloque():
     elif preanalisis[1] == "begin":
         sentencia_compuesta()
     else:
-        raise SyntaxError(f"Error: Bloque inválido. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis: Bloque inválido. Encontrado: {preanalisis[1]}")
 
 def bloque_prima():
     if preanalisis[1] in ["procedure", "function"]:
@@ -87,7 +87,7 @@ def bloque_prima():
     elif preanalisis[1] == "begin":
         sentencia_compuesta()
     else:
-        raise SyntaxError("Error: Se esperaba 'procedure', 'function' o 'begin'")
+        raise SyntaxError(f"Error de sintaxis: Se esperaba 'procedure', 'function' o 'begin'. Encontrado: {preanalisis[1]}")
 
 def declaracion_variables():
     match_val("var")
@@ -120,12 +120,12 @@ def procedimiento():
     procedimiento_prima()
 
 def procedimiento_prima():
-    if preanalisis[1] == "(":
-        parametros_formales()
+    if preanalisis[1] == ";":
         match_val(";")
         bloque()
         match_val(";")
     else:
+        parametros_formales()
         match_val(";")
         bloque()
         match_val(";")
@@ -136,19 +136,19 @@ def funcion():
     funcion_prima()
 
 def funcion_prima():
-    if preanalisis[1] == "(":
-        parametros_formales()
+    if preanalisis[1] == ":":
         match_val(":")
         tipo()
         match_val(";")
         bloque()
         match_val(";")
     else:
+        parametros_formales()
         match_val(":")
         tipo()
         match_val(";")
         bloque()
-        match_val(";")
+        match_val(";") 
 
 def parametros_formales():
     match_val("(")
@@ -179,14 +179,14 @@ def sentencia_compuesta():
     sentencia_compuesta_prima()
 
 def sentencia_compuesta_prima():
-    if preanalisis[1] in ["id", "if", "while", "begin", "read", "write"]:
-        lista_sentencias()
-        lista_sentencias_cont()
-    elif preanalisis[1] == ";":
+    if preanalisis[1] == ";":
         match_val(";")
         match_val("end")
     elif preanalisis[1] == "end":
         match_val("end")
+    else:
+        lista_sentencias()
+        lista_sentencias_cont()
 
 def lista_sentencias_cont():
     if preanalisis[1] == ";":
@@ -206,35 +206,32 @@ def mas_sentencias():
         mas_sentencias()
 
 def sentencia():
-    global token_index, preanalisis
-    
-    if preanalisis[1] in ["id", "while", "begin", "read", "write"]:
-        sentencia_cerrada()
-    elif preanalisis[1] == "if":
+    if preanalisis[1] == "if":
         sentencia_abierta()
+    else:
+        sentencia_cerrada()
 
 def sentencia_cerrada():
-    match preanalisis[1]:
-        case "id":
-            match_type("id")
-            sentencia_id()
-        case "while":
-            while_loop()
-        case "begin":
-            sentencia_compuesta()
-        case "read" | "write":
-            entrada_salida()
-        case "if":
-            match_val("if")
-            expresion()
-            match_val("then")
-            sentencia_cerrada()
-            match_val("else")
-            match_val("then")
-            sentencia_cerrada()
+    if preanalisis is not None and preanalisis[0] == "id":
+        match_type("id")
+        sentencia_id()
+    else:
+        match preanalisis[1]:
+            case "while":
+                while_loop()
+            case "begin":
+                sentencia_compuesta()
+            case "read" | "write":
+                entrada_salida()
+            case "if":
+                match_val("if")
+                expresion()
+                match_val("then")
+                sentencia_cerrada()
+                match_val("else")
+                sentencia_cerrada()
 
 def sentencia_abierta():
-    global preanalisis
     match_val("if")
     expresion()
     match_val("then")
@@ -300,14 +297,14 @@ def op_comparacion():
     if preanalisis[1] in [">", "<", "=", "<=", ">=", "<>"]:
         get_next_terminal()
     else:
-        raise SyntaxError("Error: Se esperaba operador de comparación")
+        raise SyntaxError(f"Error de sintaxis: Se esperaba operador de comparación. Encontrado: {preanalisis[1]}")
 
 def expresion_simple():
     if preanalisis[1] in ["+", "-"]:
         signo()
         termino()
         mas_terminos()
-    elif preanalisis[1] in ["num", "id", "(", "true", "false", "not"]:
+    else:
         termino()
         mas_terminos()
 
@@ -321,7 +318,7 @@ def op_suma():
     if preanalisis[1] in ["+", "-", "or"]:
         get_next_terminal()
     else:
-        raise SyntaxError("Error: Se esperaba operador de suma")
+        raise SyntaxError(f"Error de sintaxis: Se esperaba operador de suma. Encontrado: {preanalisis[1]}")
 
 def signo():
     if preanalisis[1] in ["+", "-"]:
@@ -357,7 +354,7 @@ def factor():
         match_val("not")
         factor()
     else:
-        raise SyntaxError(f"Error: Factor inválido. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis: Factor inválido. Encontrado: {preanalisis[1]}")
 
 def factor_prima():
     if preanalisis[1] == "(":
@@ -386,7 +383,7 @@ def tipo():
     if preanalisis[1] in ["integer", "boolean"]:
         get_next_terminal()
     else:
-        raise SyntaxError("Error: Se esperaba tipo 'integer' o 'boolean'")
+        raise SyntaxError(f"Error de sintaxis: Se esperaba tipo 'integer' o 'boolean'. Encontrado: {preanalisis[1]}")
 
 def read_source(fileName):
     global tokens, errores

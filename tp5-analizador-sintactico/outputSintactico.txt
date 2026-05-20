@@ -1,32 +1,24 @@
 **** TOKENS PROCESADOS ****
 program, program
-id, suma
-punto_coma, ;
+id, demo
 punto_coma, ;
 var, var
-id, id
+id, x
 coma, ,
-coma, ,
-id, resultado
+id, y
 dos_puntos, :
 integer, integer
 punto_coma, ;
-punto_coma, ;
 begin, begin
-id, id
+id, x
 asignar, :=
-num, 123
+num, 25
 punto_coma, ;
-punto_coma, ;
-id, resultado
+id, y
 asignar, :=
-id, id
-op_aritmetico, +
-num, 7
-punto_coma, ;
+id, x
 punto_coma, ;
 end, end
-punto, .
 punto, .
 
 **** ERRORES ****
