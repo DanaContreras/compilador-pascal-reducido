@@ -1,0 +1,6 @@
+program demo;
+var x, y : integer;
+begin
+  x := 25;
+  y := x;
+end.

@@ -1,25 +1,12 @@
 **** TOKENS PROCESADOS ****
-program, program
-id, demo
-punto_coma, ;
-var, var
+PROGRAM, program
+id, invalido
+punto_coma, PUNTO_COMA
+BEGIN, begin
 id, x
-coma, ,
-id, y
-dos_puntos, :
-integer, integer
-punto_coma, ;
-begin, begin
-id, x
-asignar, :=
-num, 25
-punto_coma, ;
-id, y
-asignar, :=
-id, x
-punto_coma, ;
-end, end
-punto, .
+ASIGNAR, :=
+num, 10
 
-**** ERRORES ****
-No se encontraron errores.
+[ERROR]: Error léxico: Caracter no valido en línea 3, col 11.
+
+>> El análisis falló debido a errores.

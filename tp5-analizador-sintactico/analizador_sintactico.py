@@ -1,7 +1,10 @@
 
 # Analizador Sintáctico para el compilador de Pascal Reducido, basado en la gramática proporcionada.
 
+from analizador_lexico import get_siguiente_terminal
+
 # variables globales para el análisis
+source_code = ""
 tokens = []
 errores = []
 token_index = 0
@@ -31,12 +34,25 @@ SYM = {
 }
 
 def get_next_terminal():
-    global token_index, preanalisis, tokens
-    if token_index < len(tokens):
-        preanalisis = tokens[token_index]
-        token_index += 1
+    global preanalisis, source_code
+    
+    token, error = get_siguiente_terminal(source_code)
+
+    if error:
+        preanalisis = None
+        raise SyntaxError(error)
+        
+    if token is not None:
+        tipo, valor, linea, col = token
+
+        if valor in SYM:
+            valor = SYM[valor]
+            
+        preanalisis = (tipo, valor, linea, col)
+        escribir_output(f"{token[0]}, {token[1]}")
     else:
-        preanalisis = None # no hay mas tokens.
+        preanalisis = None
+        
     return preanalisis
 
 def match_val(terminal):
@@ -45,7 +61,10 @@ def match_val(terminal):
     if preanalisis is not None and preanalisis[1] == terminal:
         get_next_terminal()
     else:
-        error_msg = f"Error de sintaxis: Se esperaba el valor '{terminal}', se encontró '{preanalisis[1]}'."
+        linea = preanalisis[2] if preanalisis else "Fin de archivo"
+        columna = preanalisis[3] if preanalisis else ""
+        encontrado = preanalisis[1] if preanalisis else " "
+        error_msg = f"Error de sintaxis en línea {linea}, col {columna}: Se esperaba el valor '{terminal}', se encontró '{encontrado}'."
         print(error_msg)
         errores.append(error_msg)
         raise SyntaxError(error_msg)
@@ -56,7 +75,10 @@ def match_type(tipo_esperado):
     if preanalisis is not None and preanalisis[0] == tipo_esperado:
         get_next_terminal()
     else:
-        error_msg = f"Error de sintaxis: Se esperaba el tipo '{tipo_esperado}', se encontró '{preanalisis[0]}'."
+        linea = preanalisis[2] if preanalisis else "Fin de archivo"
+        columna = preanalisis[3] if preanalisis else ""
+        encontrado = preanalisis[0] if preanalisis else " "
+        error_msg = f"Error de sintaxis en línea {linea}, col {columna}: Se esperaba el tipo '{tipo_esperado}', se encontró '{encontrado}'."
         print(error_msg)
         errores.append(error_msg)
         raise SyntaxError(error_msg)
@@ -78,7 +100,7 @@ def bloque():
     elif preanalisis[1] == "begin":
         sentencia_compuesta()
     else:
-        raise SyntaxError(f"Error de sintaxis: Bloque inválido. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Bloque inválido. Encontrado: {preanalisis[1]}")
 
 def bloque_prima():
     if preanalisis[1] in ["procedure", "function"]:
@@ -87,7 +109,7 @@ def bloque_prima():
     elif preanalisis[1] == "begin":
         sentencia_compuesta()
     else:
-        raise SyntaxError(f"Error de sintaxis: Se esperaba 'procedure', 'function' o 'begin'. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Se esperaba 'procedure', 'function' o 'begin'. Encontrado: {preanalisis[1]}")
 
 def declaracion_variables():
     match_val("var")
@@ -297,7 +319,7 @@ def op_comparacion():
     if preanalisis[1] in [">", "<", "=", "<=", ">=", "<>"]:
         get_next_terminal()
     else:
-        raise SyntaxError(f"Error de sintaxis: Se esperaba operador de comparación. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Se esperaba operador de comparación. Encontrado: {preanalisis[1]}")
 
 def expresion_simple():
     if preanalisis[1] in ["+", "-"]:
@@ -318,7 +340,7 @@ def op_suma():
     if preanalisis[1] in ["+", "-", "or"]:
         get_next_terminal()
     else:
-        raise SyntaxError(f"Error de sintaxis: Se esperaba operador de suma. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Se esperaba operador de suma. Encontrado: {preanalisis[1]}")
 
 def signo():
     if preanalisis[1] in ["+", "-"]:
@@ -354,7 +376,7 @@ def factor():
         match_val("not")
         factor()
     else:
-        raise SyntaxError(f"Error de sintaxis: Factor inválido. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Factor inválido. Encontrado: {preanalisis[1]}")
 
 def factor_prima():
     if preanalisis[1] == "(":
@@ -383,58 +405,48 @@ def tipo():
     if preanalisis[1] in ["integer", "boolean"]:
         get_next_terminal()
     else:
-        raise SyntaxError(f"Error de sintaxis: Se esperaba tipo 'integer' o 'boolean'. Encontrado: {preanalisis[1]}")
+        raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Se esperaba tipo 'integer' o 'boolean'. Encontrado: {preanalisis[1]}")
+
+def escribir_output(texto):
+    with open("outputSintactico.txt", "a", encoding='utf-8') as f:
+        f.write(texto + "\n")
 
 def read_source(fileName):
-    global tokens, errores
+    global errores, preanalisis, source_code
+    global i, line_number, col
+
+    errores = []
+    preanalisis = None
+    i = 0
+    line_number = 1
+    col = 1
+
     try:
         with open(fileName, 'r', encoding='utf-8') as file:
-            for line in file:
-                line = line.strip()
-                if not line:
-                    continue
-                
-                parts = line.split(',', 1)
-                if len(parts) == 2:
-                    type_token = parts[0].strip().lower()
-                    value_token = parts[1].strip()
-                    
-                    if value_token in SYM:
-                        value_token = SYM[value_token]
-                    elif type_token not in ['id', 'num', 'constante_numerica']:
-                        value_token = value_token.lower()
-                        
-                    tokens.append((type_token, value_token))
-                else:
-                    msg = f"Error léxico: La línea '{line}' no tiene el formato esperado."
-                    errores.append(msg)
-                    print(msg)
+            source_code = file.read()
+
+        with open("outputSintactico.txt", "w", encoding='utf-8') as f:
+            f.write("**** TOKENS PROCESADOS ****\n")
 
         get_next_terminal()
         
-        try:
+        if preanalisis is not None:
             programa()
             print("\n>> Análisis sintáctico completado con éxito.")
-        except SyntaxError:
-            print("\n>> El análisis falló debido a errores sintácticos.")
+            escribir_output("\n>> Análisis sintáctico completado con éxito.")
+        else:
+            print("\n>> El archivo está vacío.")
 
-        try:
-            with open("outputSintactico.txt", 'w', encoding='utf-8') as output:
-                output.write("**** TOKENS PROCESADOS ****\n")
-                for token in tokens:
-                    output.write(f"{token[0]}, {token[1]}\n")
-                
-                output.write("\n**** ERRORES ****\n")
-                if not errores:
-                    output.write("No se encontraron errores.\n")
-                else:
-                    for error in errores:
-                        output.write(f"{error}\n")
-                        
-            print("Resultados guardados correctamente en 'outputSintactico.txt'.")
-            
-        except IOError:
-            print("Error: No se pudo escribir en el archivo 'output.txt'.")
+    except SyntaxError as e:
+        msg_error = str(e)
+        
+        errores.append(msg_error)
+        
+        print(msg_error)
+        print("\n>> El análisis falló debido a errores.")
+        
+        escribir_output(f"\n[ERROR]: {msg_error}")
+        escribir_output("\n>> El análisis falló debido a errores.")
 
     except FileNotFoundError:
         print(f"Error: El archivo '{fileName}' no existe.")
