@@ -1,33 +1,12 @@
 **** TOKENS PROCESADOS ****
-program, program
-id, suma
-punto_coma, ;
-punto_coma, ;
-var, var
-id, id
-coma, ,
-coma, ,
-id, resultado
-dos_puntos, :
-integer, integer
-punto_coma, ;
-punto_coma, ;
-begin, begin
-id, id
-asignar, :=
-num, 123
-punto_coma, ;
-punto_coma, ;
-id, resultado
-asignar, :=
-id, id
-op_aritmetico, +
-num, 7
-punto_coma, ;
-punto_coma, ;
-end, end
-punto, .
-punto, .
+PROGRAM, program
+id, invalido
+punto_coma, PUNTO_COMA
+BEGIN, begin
+id, x
+ASIGNAR, :=
+num, 10
 
-**** ERRORES ****
-No se encontraron errores.
+[ERROR]: Error léxico: Caracter no valido en línea 3, col 11.
+
+>> El análisis falló debido a errores.
