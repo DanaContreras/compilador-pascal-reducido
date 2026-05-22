@@ -21,7 +21,7 @@ SYM = {
     "NE": "<>",
     "SUMA": "+",
     "RESTA": "-",
-    "MUL": "*",
+    "MULT": "*",
     "DIV": "/",
     "PAREN_IZ": "(",
     "PAREN_DR": ")",

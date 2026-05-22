@@ -1,0 +1,16 @@
+program repetitiva;
+
+var
+  i : integer;
+  a : boolean;
+
+begin
+  a := true;
+  i := 0;
+
+  while a do 
+  begin
+    i := i + 1;
+    write(i)
+  end
+end.

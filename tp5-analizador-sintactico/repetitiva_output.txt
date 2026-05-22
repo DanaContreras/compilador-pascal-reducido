@@ -1,0 +1,41 @@
+**** TOKENS PROCESADOS ****
+PROGRAM, program
+id, repetitiva
+punto_coma, PUNTO_COMA
+VAR, var
+id, i
+dos_puntos, DOS_PUNTOS
+INTEGER, integer
+punto_coma, PUNTO_COMA
+id, a
+dos_puntos, DOS_PUNTOS
+BOOLEAN, boolean
+punto_coma, PUNTO_COMA
+BEGIN, begin
+id, a
+ASIGNAR, :=
+id, true
+punto_coma, PUNTO_COMA
+id, i
+ASIGNAR, :=
+num, 0
+punto_coma, PUNTO_COMA
+WHILE, while
+id, a
+DO, do
+BEGIN, begin
+id, i
+ASIGNAR, :=
+id, i
+op_aritmetico, SUMA
+num, 1
+punto_coma, PUNTO_COMA
+WRITE, write
+paren_iz, PAREN_IZ
+id, i
+paren_der, PAREN_DR
+END, end
+END, end
+punto, PUNTO
+
+>> Análisis sintáctico completado con éxito.

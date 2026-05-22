@@ -1,0 +1,5 @@
+program comentarioError;
+begin
+  { comentario sin cerrar
+  write(10);
+end.

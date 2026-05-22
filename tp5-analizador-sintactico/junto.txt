@@ -1,0 +1,16 @@
+program junto;
+var a, b, c: integer; flag: boolean;
+begin
+    read(a);
+    b := 10;
+    c := b * 2 + a;
+    flag := (a + b * 3 > 10) AND (c - 2 <= 5) OR not(a = b);
+    if flag then
+    begin
+      write(a)
+    end
+    else
+    begin
+      write(b)
+    end;
+end.

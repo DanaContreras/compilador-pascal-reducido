@@ -97,7 +97,7 @@ def analyzer(source):
                 i += 1;
                 col += 1;
             case ')':
-                token = ("paren_der", "PAREN_DR", token_line, token_col);
+                token = ("paren_der", "PAREN_DER", token_line, token_col);
                 i += 1;
                 col += 1;
             case '{':

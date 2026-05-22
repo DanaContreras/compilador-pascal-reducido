@@ -1,0 +1,17 @@
+program completo;
+
+var x: integer;
+
+procedure inc(a: integer);
+begin
+end;
+
+function doble(n: integer): integer;
+begin
+end;
+
+begin
+  x := doble(5);
+  inc(x);
+  doble((8 + 1) / 6);
+end.
