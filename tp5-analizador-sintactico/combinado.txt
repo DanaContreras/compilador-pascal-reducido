@@ -1,0 +1,18 @@
+program combinado;
+var x, i: integer;
+begin
+  x := 0;
+  i := 0;
+  while i < 5 do
+  begin
+    if i / 2 = 3 then
+    begin
+      x := x + i;
+    end  
+    else
+    begin
+      x := x - i;
+    end;  
+    i := i + 1;
+  end;
+end.

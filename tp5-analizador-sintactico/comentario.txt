@@ -1,0 +1,5 @@
+program comentario;
+begin
+  { un comentario }
+  write(10);
+end.

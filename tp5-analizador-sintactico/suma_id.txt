@@ -1,0 +1,6 @@
+program suma;
+var id, resultado : integer;
+begin
+  id := 2;
+  resultado := id + 7;
+end.

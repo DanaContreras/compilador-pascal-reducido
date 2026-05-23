@@ -1,0 +1,21 @@
+program condicion;
+var x, y : integer;
+var a : boolean;
+begin
+  a := true;
+  x := 10;
+  y := 20;
+  if a then
+  begin
+	if x >= y then
+	begin
+	  x := x - y;
+	end
+	else
+	begin
+	  y := x + y;
+	end;
+	write(x);
+	write(y);
+  end;
+end.
