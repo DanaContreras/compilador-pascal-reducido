@@ -1,0 +1,12 @@
+**** TOKENS PROCESADOS ****
+PROGRAM, program
+id, test
+punto_coma, PUNTO_COMA
+VAR, var
+id, x
+dos_puntos, DOS_PUNTOS
+id, real
+
+[ERROR]: Error de sintaxis en línea 2, col 8: Se esperaba tipo 'integer' o 'boolean'. Encontrado: real
+
+>> El análisis falló debido a errores.

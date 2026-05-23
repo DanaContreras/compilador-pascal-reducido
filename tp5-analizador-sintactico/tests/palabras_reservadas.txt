@@ -1,0 +1,5 @@
+program test;
+var x: real;
+begin
+  x := 1;
+end.

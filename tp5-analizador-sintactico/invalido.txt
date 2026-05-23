@@ -1,9 +1,0 @@
-program invalido;
-begin
-  x := 10 @ 5;
-  x := 10 _ 5;
-  x := 10 ¡ 5;
-  x := 10 ¿ 5;
-  x := 10 $ 5;
-  x := 10 % 5;
-end.
