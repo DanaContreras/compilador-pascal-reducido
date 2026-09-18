@@ -11,18 +11,6 @@ class Lexema:
         return f"{self.nombre}\t{self.categoria}\t{self.tipo}\t{self.numLinea}\t{self.parametros}\t\t{self.tipoRetorno}"
 
 
-def _fmt(valor):
-    if valor is None or valor == "":
-        return "-"
-    return str(valor)
- 
- 
-def _fmt_parametros(parametros):
-    if not parametros:
-        return "-"
-    return ", ".join(f"{nombre}:{tipo}" for nombre, tipo in parametros)
-
-
 class TablaSimbolos:
     ENCABEZADOS = ["Nombre", "Categoría", "Tipo", "Línea", "Parámetros", "Retorno"]
 
