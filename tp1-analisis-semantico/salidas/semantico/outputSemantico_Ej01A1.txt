@@ -1,0 +1,4 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 3: El nombre 'prueba' ya fue declarado en este ámbito (línea 1).
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.

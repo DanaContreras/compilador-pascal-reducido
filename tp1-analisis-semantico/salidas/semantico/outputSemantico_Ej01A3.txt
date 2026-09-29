@@ -1,0 +1,4 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 5: El nombre 'prueba' ya fue declarado en este ámbito (línea 1).
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontró 1 error semántico.

@@ -1,0 +1,5 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 5: El nombre 'prueba' ya fue declarado en este ámbito (línea 1).
+Error semántico en línea 12: 'prueba' es programa y no se puede llamar como procedimiento.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.

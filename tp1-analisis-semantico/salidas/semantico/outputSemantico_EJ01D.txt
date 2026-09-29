@@ -1,0 +1,5 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 12: El nombre 'nuevo' ya fue declarado en este ámbito (línea 4).
+Error semántico en línea 19: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontraron 2 errores semánticos.

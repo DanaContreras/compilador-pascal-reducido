@@ -1,0 +1,5 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 12: El nombre 'a' ya fue declarado en este ámbito (línea 11).
+Error semántico en línea 20: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
