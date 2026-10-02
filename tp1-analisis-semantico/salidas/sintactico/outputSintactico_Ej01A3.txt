@@ -1,0 +1,23 @@
+**** TOKENS PROCESADOS ****
+PROGRAM, program
+id, prueba
+punto_coma, PUNTO_COMA
+VAR, var
+id, a
+coma, COMA
+id, b
+dos_puntos, DOS_PUNTOS
+INTEGER, integer
+punto_coma, PUNTO_COMA
+FUNCTION, function
+id, prueba
+paren_iz, PAREN_IZ
+id, a
+dos_puntos, DOS_PUNTOS
+INTEGER, integer
+paren_der, PAREN_DR
+punto_coma, PUNTO_COMA
+
+[ERROR]: Error de sintaxis en línea 5, col 28: Se esperaba el valor ':', se encontró ';'.
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontró 1 error semántico.

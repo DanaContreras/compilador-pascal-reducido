@@ -1,7 +1,8 @@
 
 # Analizador Sintáctico para el compilador de Pascal Reducido, basado en la gramática proporcionada.
 
-from analizador_lexico import get_siguiente_terminal
+import os
+import analizador_lexico
 from tablaSimbolos import Lexema, Pila, Scope, ErrorTablaSimbolos, PROGRAMA, VARIABLE, PARAMETRO, PROCEDIMIENTO, FUNCION, INTEGER, BOOLEAN
 from reglas_tipos import mensaje_tipo, tipo_binario, tipo_unario
 
@@ -37,11 +38,13 @@ SYM = {
     "LLAVE_DR": "}"
 }
 
+archivo_sintactico = None
+archivo_semantico = None
 
 def get_next_terminal():
     global preanalisis, source_code
     
-    token, error = get_siguiente_terminal(source_code)
+    token, error = analizador_lexico.get_siguiente_terminal(source_code)
 
     if error:
         preanalisis = None
@@ -480,11 +483,11 @@ def tipo():
         raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Se esperaba tipo 'integer' o 'boolean'. Encontrado: {preanalisis[1]}")
 
 def escribir_output(texto):
-    with open("outputSintactico.txt", "a", encoding='utf-8') as f:
+    with open(archivo_sintactico, "a", encoding='utf-8') as f:
         f.write(texto + "\n")
 
 def escribir_output_semantico(texto):
-    with open("outputSemantico.txt", "a", encoding='utf-8') as f:
+    with open(archivo_semantico, "a", encoding='utf-8') as f:
         f.write(texto + "\n")
 
 def error_semantico(linea, msj):
@@ -593,7 +596,8 @@ def informar_resultado(texto):
 
 def read_source(fileName):
     global errores, errores_semanticos, preanalisis, source_code, pila
-    global i, line_number, col
+    #global i, line_number, col
+    global archivo_semantico, archivo_sintactico
 
     errores = []
     errores_semanticos = []
@@ -602,18 +606,23 @@ def read_source(fileName):
     print(">> Iniciando análisis sintáctico...")
 
     preanalisis = None
-    i = 0
-    line_number = 1
-    col = 1
+    analizador_lexico.i = 0
+    analizador_lexico.line_number = 1
+    analizador_lexico.col = 1
+
+    nombre_base = os.path.splitext(os.path.basename(fileName))[0]
+
+    archivo_sintactico = f"salidas/sintactico/outputSintactico_{nombre_base}.txt"
+    archivo_semantico = f"salidas/semantico/outputSemantico_{nombre_base}.txt"
 
     try:
         with open(fileName, 'r', encoding='utf-8') as file:
             source_code = file.read()
 
-        with open("outputSintactico.txt", "w", encoding='utf-8') as f:
+        with open(archivo_sintactico, "w", encoding='utf-8') as f:
             f.write("**** TOKENS PROCESADOS ****\n")
 
-        with open("outputSemantico.txt", "w", encoding='utf-8') as f:
+        with open(archivo_semantico, "w", encoding='utf-8') as f:
             f.write("**** ERRORES SEMÁNTICOS ****\n")
 
         get_next_terminal()

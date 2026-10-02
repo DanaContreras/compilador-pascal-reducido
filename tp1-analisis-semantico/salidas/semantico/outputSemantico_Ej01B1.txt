@@ -1,0 +1,4 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 4: El nombre 'b' ya fue declarado en este ámbito (línea 3).
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.

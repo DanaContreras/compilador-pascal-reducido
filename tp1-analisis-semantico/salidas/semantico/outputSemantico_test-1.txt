@@ -1,0 +1,24 @@
+**** ERRORES SEMÁNTICOS ****
+Error semántico en línea 5: El nombre 'a' ya fue declarado en este ámbito (línea 3).
+Error semántico en línea 12: La asignación a 'y' debe ser boolean y es integer.
+Error semántico en línea 15: El nombre 'x' ya fue declarado en este ámbito (línea 15).
+Error semántico en línea 22: La asignación a 'esPar' debe ser boolean y es integer.
+Error semántico en línea 26: 'c' no fue declarado.
+Error semántico en línea 27: 'c' no fue declarado.
+Error semántico en línea 28: La asignación a 'a' debe ser integer y es boolean.
+Error semántico en línea 29: El operando izquierdo de '+' debe ser integer y es boolean.
+Error semántico en línea 30: El operando izquierdo de 'and' debe ser boolean y es integer.
+Error semántico en línea 30: El operando derecho de 'and' debe ser boolean y es integer.
+Error semántico en línea 31: No se puede comparar integer con boolean usando '='.
+Error semántico en línea 32: La condición del if debe ser boolean y es integer.
+Error semántico en línea 34: La condición del while debe ser boolean y es integer.
+Error semántico en línea 36: 'proc' espera 2 argumento(s) y recibió 1.
+Error semántico en línea 37: El argumento 1 de 'proc' debe ser integer y es boolean.
+Error semántico en línea 37: El argumento 2 de 'proc' debe ser boolean y es integer.
+Error semántico en línea 38: 'proc' es procedimiento y no se puede usar en una expresión.
+Error semántico en línea 39: 'a' es variable y no se puede llamar como procedimiento.
+Error semántico en línea 40: 'local' no fue declarado.
+Error semántico en línea 41: Solo se puede asignar el resultado de la función 'suma' dentro de su cuerpo.
+Error semántico en línea 42: El operando izquierdo de '+' debe ser integer y es boolean.
+
+>> Análisis sintáctico completo. Se encontraron 21 errores semánticos.
