@@ -8,17 +8,19 @@ import analizador_sintactico
 def main():
     if len(sys.argv) < 2:
         print("Error. Uso correcto:")
-        print(r"python3 ./analizador2 '.\BatSemánticos2023\Semánticos\Ej01*.PAS'")
+        print('  Linux:   python3 analizador "BatSemánticos2023/Semánticos/Ej01*.PAS"')
+        print('  Windows: python analizador "BatSemánticos2023/Semánticos/Ej01*.PAS"')
         sys.exit(1)
 
-    pattern = sys.argv[1]
-    files = glob.glob(pattern)
+    files = []
+    for arg in sys.argv[1:]:
+        files.extend(glob.glob(arg))
 
     if not files:
-        print(f"No se encontraron archivos para: {pattern}")
+        print(f"No se encontraron archivos para: {' '.join(sys.argv[1:])}")
         sys.exit(1)
 
-    for file_name in files:
+    for file_name in sorted(set(files)):
         print(f"\nAnalizando: {file_name}")
         analizador_sintactico.read_source(file_name)
 

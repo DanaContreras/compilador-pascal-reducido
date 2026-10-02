@@ -615,6 +615,10 @@ def read_source(fileName):
     archivo_sintactico = f"salidas/sintactico/outputSintactico_{nombre_base}.txt"
     archivo_semantico = f"salidas/semantico/outputSemantico_{nombre_base}.txt"
 
+    # Crea las carpetas de salida si no existen
+    os.makedirs(os.path.dirname(archivo_sintactico), exist_ok=True)
+    os.makedirs(os.path.dirname(archivo_semantico), exist_ok=True)
+
     try:
         with open(fileName, 'r', encoding='utf-8') as file:
             source_code = file.read()
