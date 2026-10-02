@@ -177,4 +177,12 @@ class Pila:
         return len(self.pila) == 0
 
     def __str__(self):
-        return "\n\n".join(self.registro)
+        resultado = self.registro.copy()
+        
+        for scope in self.pila:
+            resultado.append(
+                f"ÁMBITO '{scope.nombre}' (nivel {scope.nivel})\n"
+                f"{scope.tabla}"
+            )
+        
+        return "\n\n".join(resultado)
