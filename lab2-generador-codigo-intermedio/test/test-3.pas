@@ -1,0 +1,11 @@
+program compuesto;
+var x, y: integer; ok: boolean;
+begin
+    x := 100;
+    y := x / 2 - 5;
+    while (x > 0) AND (ok = true) do
+    begin
+        x := x - 1;
+        ok := (x * y <> 0) OR (x <= y)
+    end;
+end.

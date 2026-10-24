@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import sys
+import glob
+import analizador_sintactico
+
+
+def main():
+    if len(sys.argv) < 2:
+        print("Error. Uso correcto:")
+        print('  Linux:   python3 analizador "BatSemánticos2023/Semánticos/Ej01*.PAS"')
+        print('  Windows: python analizador "BatSemánticos2023/Semánticos/Ej01*.PAS"')
+        sys.exit(1)
+
+    files = []
+    for arg in sys.argv[1:]:
+        files.extend(glob.glob(arg))
+
+    if not files:
+        print(f"No se encontraron archivos para: {' '.join(sys.argv[1:])}")
+        sys.exit(1)
+
+    for file_name in sorted(set(files)):
+        print(f"\nAnalizando: {file_name}")
+        analizador_sintactico.read_source(file_name)
+
+
+if __name__ == "__main__":
+    main()

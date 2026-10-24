@@ -1,0 +1,83 @@
+Error semántico en línea 17: 'algo' espera 0 argumento(s) y recibió 1.
+Error semántico en línea 18: 'nuevo' espera 3 argumento(s) y recibió 1.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 18: 'algo' espera 2 argumento(s) y recibió 1.
+Error semántico en línea 19: 'nuevo' espera 3 argumento(s) y recibió 1.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 18: 'TRUE' no fue declarado.
+Error semántico en línea 18: 'TRUE' no fue declarado.
+Error semántico en línea 18: 'algo' espera 2 argumento(s) y recibió 3.
+Error semántico en línea 19: 'nuevo' espera 3 argumento(s) y recibió 1.
+
+>> Análisis sintáctico completo. Se encontraron 4 errores semánticos.
+Error semántico en línea 19: 'nuevo' espera 3 argumento(s) y recibió 2.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 19: 'nuevo' espera 3 argumento(s) y recibió 4.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 18: El argumento 2 de 'algo' debe ser boolean y es integer.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 18: El argumento 1 de 'algo' debe ser boolean y es integer.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 19: El argumento 2 de 'nuevo' debe ser integer y es boolean.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 18: 'TRUE' no fue declarado.
+Error semántico en línea 18: El argumento 2 de 'algo' debe ser boolean y es integer.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 18: 'TRUE' no fue declarado.
+Error semántico en línea 19: El argumento 2 de 'nuevo' debe ser integer y es boolean.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 18: 'TRUE' no fue declarado.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 18: 'TRUE' no fue declarado.
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 3: El nombre 'prueba' ya fue declarado en este ámbito (línea 1).
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 5: El nombre 'prueba' ya fue declarado en este ámbito (línea 1).
+Error semántico en línea 12: 'prueba' es programa y no se puede llamar como procedimiento.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 5: El nombre 'prueba' ya fue declarado en este ámbito (línea 1).
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontró 1 error semántico.
+Error semántico en línea 4: El nombre 'b' ya fue declarado en este ámbito (línea 3).
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 7: El nombre 'm' ya fue declarado en este ámbito (línea 6).
+
+>> Análisis sintáctico completo. Se encontró 1 error semántico.
+Error semántico en línea 6: El nombre 'nuevo' ya fue declarado en este ámbito (línea 4).
+Error semántico en línea 9: La asignación a 'nuevo' debe ser boolean y es integer.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 12: El nombre 'nuevo' ya fue declarado en este ámbito (línea 4).
+Error semántico en línea 19: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontraron 2 errores semánticos.
+Error semántico en línea 14: El nombre 'j' ya fue declarado en este ámbito (línea 12).
+Error semántico en línea 25: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontraron 2 errores semánticos.
+Error semántico en línea 12: El nombre 'a' ya fue declarado en este ámbito (línea 11).
+Error semántico en línea 20: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> Análisis sintáctico completo. Se encontraron 2 errores semánticos.
+Error semántico en línea 14: El nombre 'a' ya fue declarado en este ámbito (línea 11).
+Error semántico en línea 25: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontraron 2 errores semánticos.
+Error semántico en línea 14: El nombre 'a' ya fue declarado en este ámbito (línea 11).
+Error semántico en línea 25: 'algo' es funcion y no se puede llamar como procedimiento.
+
+>> El análisis se detuvo por un error sintáctico. Antes del corte: Se encontraron 2 errores semánticos.
