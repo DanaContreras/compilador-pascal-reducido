@@ -27,6 +27,10 @@ class Lexema:
         self.num_linea = num_linea 
         self.parametros = list(parametros) if parametros else []  # [(nombre, tipo), ...] en orden
         self.ambito = ambito         # Scope propio solo en subprogramas
+        # datos para la generación de código MEPA
+        self.nivel = None            # nivel léxico (variables y parámetros)
+        self.desplazamiento = None 
+        self.etiqueta = None         # etiqueta de entrada (subprogramas), la asigna el generador
 
     def es_subprograma(self):
         return self.categoria in (PROCEDIMIENTO, FUNCION)
@@ -40,6 +44,21 @@ class Lexema:
     def tipos_parametros(self):
         return [tipo for _, tipo in self.parametros]
 
+    def direccion(self):
+        # par (nivel, desplazamiento) que usan APVL/ALVL, o None si no tiene.
+        # En una función es la del resultado
+        if self.categoria in (VARIABLE, PARAMETRO) and self.nivel is not None:
+            return (self.nivel, self.desplazamiento)
+        if self.categoria == FUNCION and self.ambito is not None:
+            return (self.ambito.nivel, -(self.ambito.cantidad_parametros() + 3))
+        return None
+
+    def direccion_str(self):
+        if self.es_subprograma():
+            return self.etiqueta or "-"
+        direccion = self.direccion()
+        return f"({direccion[0]},{direccion[1]})" if direccion else "-"
+
     def parametros_str(self):
         if not self.es_subprograma():
             return "-"
@@ -51,13 +70,14 @@ class Lexema:
             self.categoria,
             self.tipo if self.tipo is not None else "-",
             self.num_linea if self.num_linea is not None else "-",
+            self.direccion_str(),
             self.parametros_str(),
         ])
 
 
 class TablaSimbolos:
-    ENCABEZADOS = ("NOMBRE", "CATEGORÍA", "TIPO", "LÍNEA", "PARÁMETROS")
-    ANCHOS = (18, 15, 9, 7)
+    ENCABEZADOS = ("NOMBRE", "CATEGORÍA", "TIPO", "LÍNEA", "DIRECCIÓN", "PARÁMETROS")
+    ANCHOS = (18, 15, 9, 7, 11)
 
     @classmethod
     def fila(cls, valores):
@@ -107,9 +127,28 @@ class Scope:
         self.nombre = nombre
         self.padre = padre
         self.tabla = TablaSimbolos()
+        self.cantidad_variables = 0   # variables locales: RMEM/LMEM del bloque
+        self.parametros = []          # lexemas de los parámetros, en orden
 
     def insertar(self, simbolo):
-        return self.tabla.insertar(simbolo)
+        self.tabla.insertar(simbolo)
+        if simbolo.categoria == VARIABLE:
+            simbolo.nivel = self.nivel
+            simbolo.desplazamiento = self.cantidad_variables
+            self.cantidad_variables += 1
+        elif simbolo.categoria == PARAMETRO:
+            self.parametros.append(simbolo)
+            self.asignar_desplazamientos_parametros()
+        return simbolo
+
+    def asignar_desplazamientos_parametros(self):
+        n = len(self.parametros)
+        for i, parametro in enumerate(self.parametros, start=1):
+            parametro.nivel = self.nivel
+            parametro.desplazamiento = -(n + 3 - i)
+
+    def cantidad_parametros(self):
+        return len(self.parametros)
 
     def buscar(self, nombre):
         simbolo = self.tabla.buscar(nombre)
