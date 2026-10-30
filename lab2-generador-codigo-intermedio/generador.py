@@ -60,6 +60,7 @@ class GeneradorMEPA:
         self.emitir("APCT", int(valor))
 
     def operacion_binaria(self, operador):
+        print("Operacion binaria recibida: ",operador)
         self.emitir(OPERACIONES_BINARIAS[operador.lower()])
 
     def operacion_unaria(self, operador):
@@ -81,6 +82,7 @@ class GeneradorMEPA:
         etiqueta_fin = self.nueva_etiqueta()
         self.emitir("DSVS", etiqueta_fin)
         self.marcar(etiqueta_falso)
+        return etiqueta_fin
 
     def condicion(self):
         etiqueta = self.nueva_etiqueta()
@@ -126,6 +128,11 @@ class GeneradorMEPA:
 
     def iniciar_programa(self):
         self.emitir("INPP")
+
+    def inicio_programa_principal(self):
+        etiqueta = self.nueva_etiqueta()
+        self.emitir("DSVS", etiqueta)
+        return etiqueta
 
     def entrar_subprograma(self, simbolo):
         nivel = simbolo.ambito.nivel

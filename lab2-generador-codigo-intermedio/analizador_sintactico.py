@@ -6,6 +6,8 @@ import analizador_lexico
 from tablaSimbolos import Lexema, Pila, Scope, ErrorTablaSimbolos, PROGRAMA, VARIABLE, PARAMETRO, PROCEDIMIENTO, FUNCION, INTEGER, BOOLEAN
 from reglas_tipos import mensaje_tipo, tipo_binario, tipo_unario
 
+from generador import GeneradorMEPA
+
 # variables globales para el análisis
 source_code = ""
 tokens = []
@@ -40,6 +42,8 @@ SYM = {
 
 archivo_sintactico = None
 archivo_semantico = None
+
+generador = None
 
 def get_next_terminal():
     global preanalisis, source_code
@@ -97,15 +101,21 @@ def programa():
     match_type("id")
     declarar(Lexema(nombre, PROGRAMA, num_linea=linea))
     match_val(";")
+    generador.iniciar_programa()
     bloque()
     match_val(".")
+    generador.liberar_variables(pila.top())
+    generador.finalizar_programa()
 
 def bloque():
     if preanalisis[1] == "var":
         declaracion_variables()
+        generador.reservar_variables(pila.top())
         bloque_prima()
     elif preanalisis[1] in ["procedure", "function"]:
+        etiqueta = generador.inicio_programa_principal()
         declaracion_subrutinas()
+        generador.fin_subprogramas(etiqueta)
         sentencia_compuesta()
     elif preanalisis[1] == "begin":
         sentencia_compuesta()
@@ -114,7 +124,9 @@ def bloque():
 
 def bloque_prima():
     if preanalisis[1] in ["procedure", "function"]:
+        etiqueta = generador.inicio_programa_principal()
         declaracion_subrutinas()
+        generador.fin_subprogramas(etiqueta)
         sentencia_compuesta()
     elif preanalisis[1] == "begin":
         sentencia_compuesta()
@@ -151,7 +163,10 @@ def procedimiento():
     nombre, linea = preanalisis[1], preanalisis[2]
     match_type("id")
     simbolo = abrir_subprograma(nombre, PROCEDIMIENTO, linea)
+    generador.entrar_subprograma(simbolo)
     procedimiento_prima(simbolo)
+    generador.liberar_variables(pila.top())
+    generador.salir_subprograma(simbolo)
     pila.cerrar_ambito()
 
 def procedimiento_prima(simbolo):
@@ -170,7 +185,10 @@ def funcion():
     nombre, linea = preanalisis[1], preanalisis[2]
     match_type("id")
     simbolo = abrir_subprograma(nombre, FUNCION, linea)
+    generador.entrar_subprograma(simbolo)
     funcion_prima(simbolo)
+    generador.liberar_variables(pila.top())
+    generador.salir_subprograma(simbolo)
     pila.cerrar_ambito()
 
 def funcion_prima(simbolo):
@@ -272,9 +290,16 @@ def sentencia_cerrada():
             case "while":
                 linea = preanalisis[2]
                 match_val("while")
+
+                etiq_inicio=generador.inicio_while()
                 controlar_tipo(BOOLEAN, expresion(), linea, "La condición del while")
+
+                etiqueta_fin = generador.condicion()
+                
                 match_val("do")
                 sentencia_cerrada()
+
+                generador.fin_while(etiq_inicio, etiqueta_fin)
             case "begin":
                 sentencia_compuesta()
             case "read" | "write":
@@ -283,10 +308,20 @@ def sentencia_cerrada():
                 linea = preanalisis[2]
                 match_val("if")
                 controlar_tipo(BOOLEAN, expresion(), linea, "La condición del if")
+
+                etiqueta_falso = generador.condicion()
+
                 match_val("then")
                 sentencia_cerrada()
+
                 match_val("else")
+
+                etiqueta_fin = generador.desviar_sino(etiqueta_falso)
+
                 sentencia_cerrada()
+
+                generador.marcar(etiqueta_fin)
+
 
 def sentencia_abierta():
 
@@ -294,20 +329,29 @@ def sentencia_abierta():
         linea = preanalisis[2]
         match_val("if")
         controlar_tipo(BOOLEAN, expresion(), linea, "La condición del if")
+        etiqueta_falso = generador.condicion()
         match_val("then")
         sentencia()    
         
         # Asociamos al else al if más cercano
         if preanalisis is not None and preanalisis[1] == "else":
             match_val("else")
+            etiqueta_fin = generador.desviar_sino(etiqueta_falso)
+                        
             sentencia()
+            generador.marcar(etiqueta_fin)
+        else:
+            generador.marcar(etiqueta_falso)
             
     elif preanalisis[1] == "while":
         linea = preanalisis[2]
         match_val("while")
+        etiq_inicio=generador.inicio_while()
         controlar_tipo(BOOLEAN, expresion(), linea, "La condición del while")
+        etiqueta_fin = generador.condicion()
         match_val("do")
         sentencia_abierta()
+        generador.fin_while(etiq_inicio, etiqueta_fin)
 
 def sentencia_id(nombre, linea):
     simbolo = buscar_uso(nombre, linea)
@@ -315,6 +359,7 @@ def sentencia_id(nombre, linea):
         tipo_destino = controlar_asignacion(simbolo, linea)
         match_val(":=")
         controlar_tipo(tipo_destino, expresion(), linea, f"La asignación a '{nombre}'")
+        generador.asignar(simbolo)
     else:
         # llamada a procedimiento, con o sin argumentos
         argumentos = []
@@ -323,6 +368,8 @@ def sentencia_id(nombre, linea):
             argumentos = lista_expresiones()
             match_val(")")
         controlar_llamada_procedimiento(simbolo, argumentos, linea)
+        generador.llamar(simbolo)
+
 
 #def while_loop():
 #    match_val("while")
@@ -346,6 +393,7 @@ def entrada():
         error_semantico(linea, f"read necesita una variable y '{nombre}' es {simbolo.categoria}.")
     elif simbolo is not None:
         controlar_tipo(INTEGER, simbolo.tipo, linea, f"La variable '{nombre}' de read")
+    generador.leer(simbolo)
     match_val(")")
 
 def salida():
@@ -353,6 +401,7 @@ def salida():
     match_val("(")
     expresion()
     match_val(")")
+    generador.imprimir()
 
 def lista_expresiones():
     # devuelve el tipo de cada expresión, en orden
@@ -371,7 +420,9 @@ def expresion_prima(tipo_izq):
     if preanalisis[1] in [">", "<", "=", "<=", ">=", "<>"]:
         op, linea = preanalisis[1], preanalisis[2]
         op_comparacion()
-        return tipo_operacion(op, tipo_izq, expresion_simple(), linea)
+        tipo_der=expresion_simple()
+        generador.operacion_binaria(op)
+        return tipo_operacion(op, tipo_izq, tipo_der, linea)
     return tipo_izq
 
 def op_comparacion():
@@ -392,7 +443,10 @@ def mas_terminos(tipo_izq):
     if preanalisis[1] in ["+", "-", "or"]:
         op, linea = preanalisis[1], preanalisis[2]
         op_suma()
-        tipo_res = tipo_operacion(op, tipo_izq, termino(), linea)
+        tipo_der = termino()
+        generador.operacion_binaria(op)
+        
+        tipo_res = tipo_operacion(op, tipo_izq, tipo_der, linea)
         return mas_terminos(tipo_res)
     return tipo_izq
 
@@ -413,7 +467,9 @@ def mas_factores(tipo_izq):
     if preanalisis[1] in ["*", "/", "and"]:
         op, linea = preanalisis[1], preanalisis[2]
         op_mult()
-        tipo_res = tipo_operacion(op, tipo_izq, factor(), linea)
+        tipo_der = termino()
+        generador.operacion_binaria(op)
+        tipo_res = tipo_operacion(op, tipo_izq, tipo_der, linea)
         return mas_factores(tipo_res)
     return tipo_izq
 
@@ -423,17 +479,34 @@ def op_mult():
 
 def factor():
     if preanalisis[0] in ["num"]:
+        valor = preanalisis[1]
+        generador.apilar_constante(valor)
         get_next_terminal()
         return INTEGER
     elif preanalisis[1] in ["true", "false"]:
+        valor = preanalisis[1]
+        generador.apilar_constante(valor)
         get_next_terminal()
         return BOOLEAN
     elif preanalisis[0] == "id":
         nombre, linea = preanalisis[1], preanalisis[2]
         match_type("id")
         simbolo = buscar_uso(nombre, linea)
+
+        if simbolo is not None and simbolo.categoria == FUNCION:
+            generador.reservar_resultado()
+            
+
         argumentos = factor_prima()
-        return controlar_uso_en_expresion(simbolo, argumentos, linea)
+        tipo_resultado = controlar_uso_en_expresion(simbolo, argumentos, linea)
+
+        if(simbolo is not None):
+            if simbolo.categoria == FUNCION:
+                generador.llamar(simbolo)
+            elif simbolo.categoria in (VARIABLE, PARAMETRO):
+                generador.apilar_variable(simbolo)
+        
+        return tipo_resultado
     elif preanalisis[1] == "(":
         match_val("(")
         tipo_expr = expresion()
@@ -597,12 +670,13 @@ def informar_resultado(texto):
 def read_source(fileName):
     global errores, errores_semanticos, preanalisis, source_code, pila
     #global i, line_number, col
-    global archivo_semantico, archivo_sintactico
+    global archivo_semantico, archivo_sintactico, generador
 
     errores = []
     errores_semanticos = []
 
     pila = Pila()
+    generador = GeneradorMEPA()
     print(">> Iniciando análisis sintáctico...")
 
     preanalisis = None
@@ -635,6 +709,7 @@ def read_source(fileName):
             programa()
             if not errores_semanticos:
                 informar_resultado("\n>> Análisis completado con éxito. " + resumen_semantico())
+                generador.guardar_generacion("./traduccion.mepa")
             else:
                 informar_resultado("\n>> Análisis sintáctico completo. " + resumen_semantico())
             print("\nRegistro de ámbitos:\n" + str(pila))
