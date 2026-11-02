@@ -435,7 +435,9 @@ def expresion_simple():
     if preanalisis[1] in ["+", "-"]:
         op, linea = preanalisis[1], preanalisis[2]
         signo()
-        return mas_terminos(tipo_operacion_unaria(op, termino(), linea))
+        tipo = tipo_operacion_unaria(op, termino(), linea)
+        generador.operacion_unaria(op)
+        return mas_terminos(tipo)
     else:
         return mas_terminos(termino())
 
@@ -515,6 +517,7 @@ def factor():
     elif preanalisis[1] == "not":
         linea = preanalisis[2]
         match_val("not")
+        generador.operacion_unaria("not")
         return tipo_operacion_unaria("not", factor(), linea)
     else:
         raise SyntaxError(f"Error de sintaxis en línea {preanalisis[2]}, col {preanalisis[3]}: Factor inválido. Encontrado: {preanalisis[1]}")
