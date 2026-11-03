@@ -6,6 +6,8 @@ class ErrorTablaSimbolos(Exception):
     El analizador semántico la captura, informa el error y continúa."""
 
 
+
+
 # categorías posibles de un lexema
 PROGRAMA = "programa"
 VARIABLE = "variable"

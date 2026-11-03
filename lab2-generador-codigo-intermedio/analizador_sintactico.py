@@ -1,6 +1,7 @@
 
 # Analizador Sintáctico para el compilador de Pascal Reducido, basado en la gramática proporcionada.
 
+from copy import Error
 import os
 import analizador_lexico
 from tablaSimbolos import Lexema, Pila, Scope, ErrorTablaSimbolos, PROGRAMA, VARIABLE, PARAMETRO, PROCEDIMIENTO, FUNCION, INTEGER, BOOLEAN
@@ -42,7 +43,7 @@ SYM = {
 
 archivo_sintactico = None
 archivo_semantico = None
-
+archivo_generador = None
 generador = None
 
 def get_next_terminal():
@@ -391,6 +392,7 @@ def entrada():
     simbolo = buscar_uso(nombre, linea)
     if simbolo is not None and simbolo.categoria not in (VARIABLE, PARAMETRO):
         error_semantico(linea, f"read necesita una variable y '{nombre}' es {simbolo.categoria}.")
+        #raise ErrorTablaSimbolos(f"Error semántico en línea {linea}: read necesita una variable y '{nombre}' es {simbolo.categoria}.")
     elif simbolo is not None:
         controlar_tipo(INTEGER, simbolo.tipo, linea, f"La variable '{nombre}' de read")
     generador.leer(simbolo)
@@ -570,8 +572,12 @@ def error_semantico(linea, msj):
     # se registra y el análisis sigue
     error_msg = f"Error semántico en línea {linea}: {msj}"
     errores_semanticos.append(error_msg)
-    print(error_msg)
+    #print(error_msg)
     escribir_output_semantico(error_msg)
+    raise ErrorTablaSimbolos(error_msg)
+
+def escribir_traduccion():
+    generador.guardar_generacion(archivo_generador)
 
 def declarar(lexema):
     # inserta en el ámbito actual
@@ -585,6 +591,7 @@ def buscar_uso(nombre, linea):
     simbolo = pila.buscar(nombre)
     if simbolo is None:
         error_semantico(linea, f"'{nombre}' no fue declarado.")
+        #raise ErrorTablaSimbolos(f"Error semántico en línea {linea}: '{nombre}' no fue declarado. ")
     return simbolo
 
 def es_funcion_abierta(simbolo):
@@ -673,7 +680,7 @@ def informar_resultado(texto):
 def read_source(fileName):
     global errores, errores_semanticos, preanalisis, source_code, pila
     #global i, line_number, col
-    global archivo_semantico, archivo_sintactico, generador
+    global archivo_semantico, archivo_sintactico, generador, archivo_generador
 
     errores = []
     errores_semanticos = []
@@ -688,13 +695,14 @@ def read_source(fileName):
     analizador_lexico.col = 1
 
     nombre_base = os.path.splitext(os.path.basename(fileName))[0]
-
     archivo_sintactico = f"salidas/sintactico/outputSintactico_{nombre_base}.txt"
     archivo_semantico = f"salidas/semantico/outputSemantico_{nombre_base}.txt"
+    archivo_generador = f"salidas/traduccion/traduccion_{nombre_base}.mepa"
 
     # Crea las carpetas de salida si no existen
     os.makedirs(os.path.dirname(archivo_sintactico), exist_ok=True)
     os.makedirs(os.path.dirname(archivo_semantico), exist_ok=True)
+    os.makedirs(os.path.dirname(archivo_generador), exist_ok=True)
 
     try:
         with open(fileName, 'r', encoding='utf-8') as file:
@@ -712,7 +720,7 @@ def read_source(fileName):
             programa()
             if not errores_semanticos:
                 informar_resultado("\n>> Análisis completado con éxito. " + resumen_semantico())
-                generador.guardar_generacion("./traduccion.mepa")
+                generador.guardar_generacion(archivo_generador)
             else:
                 informar_resultado("\n>> Análisis sintáctico completo. " + resumen_semantico())
             print("\nRegistro de ámbitos:\n" + str(pila))
@@ -733,5 +741,21 @@ def read_source(fileName):
         )
         print("\nRegistro de ámbitos hasta el corte:\n" + str(pila))
 
+    except ErrorTablaSimbolos as e:
+        msg_error = str(e)
+                
+        errores.append(msg_error)
+                
+        print(msg_error)
+        escribir_output_semantico(f"\n[ERROR]: {msg_error}")
+        
+        informar_resultado(
+                    "\n>> El análisis se detuvo por un error semántico. "
+                    "Antes del corte: " + resumen_semantico()
+                )
+        print("\nRegistro de ámbitos hasta el corte:\n" + str(pila))
+
     except FileNotFoundError:
         print(f"Error: El archivo '{fileName}' no existe.")
+
+    

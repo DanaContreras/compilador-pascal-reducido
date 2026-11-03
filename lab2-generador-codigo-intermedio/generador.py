@@ -60,7 +60,6 @@ class GeneradorMEPA:
         self.emitir("APCT", int(valor))
 
     def operacion_binaria(self, operador):
-        print("Operacion binaria recibida: ",operador)
         self.emitir(OPERACIONES_BINARIAS[operador.lower()])
 
     def operacion_unaria(self, operador):
